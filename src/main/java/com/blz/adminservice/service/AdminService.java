@@ -160,4 +160,13 @@ public class AdminService implements IAdminService {
         throw new AdminNotFoundException("Token not find", 400);
     }
 
+    @Override
+    public Boolean validateUser(String token) {
+        Long decode = tokenUtil.decodeToken(token);
+        Optional<AdminModel> isTokenPresent = adminRepository.findById(decode);
+        if (isTokenPresent.isPresent())
+            return true;
+        throw new AdminNotFoundException("Token not find", 400);
+    }
+
 }

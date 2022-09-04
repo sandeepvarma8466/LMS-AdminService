@@ -5,6 +5,8 @@ import com.blz.adminservice.model.AdminModel;
 import com.blz.adminservice.service.AdminService;
 import com.blz.adminservice.util.AdminResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,8 +34,10 @@ public class AdminController {
      * @Param : AdminDTO
      */
     @PostMapping("/addAdmin")
-    public AdminModel addAdmin(@Valid @RequestBody AdminDTO adminDTO) {
-        return adminService.addAdmin(adminDTO);
+    public ResponseEntity<AdminResponse> addAdmin(@Valid @RequestBody AdminDTO adminDTO) {
+        AdminModel adminModel = adminService.addAdmin(adminDTO);
+        AdminResponse adminResponse = new AdminResponse(200,"Admin added successfully",adminModel);
+        return new ResponseEntity<>(adminResponse, HttpStatus.OK);
     }
 
     /*
@@ -41,9 +45,11 @@ public class AdminController {
      * @Param : AdminDTO and id
      */
     @PutMapping("/update/{id}")
-    public AdminModel updateAdmin(@PathVariable("id") Long id, @Valid @RequestBody AdminDTO adminDTO,
+    public ResponseEntity<AdminResponse> updateAdmin(@PathVariable("id") Long id, @Valid @RequestBody AdminDTO adminDTO,
                                   @RequestHeader String token) {
-        return adminService.updateAdmin(id, adminDTO, token);
+        AdminModel adminModel = adminService.updateAdmin(id, adminDTO, token);
+        AdminResponse adminResponse = new AdminResponse(200,"Admin Updated successfully",adminModel);
+        return new ResponseEntity<>(adminResponse, HttpStatus.OK);
     }
 
     /*
@@ -51,8 +57,10 @@ public class AdminController {
      * @Param : token
      */
     @GetMapping("/getadmin")
-    public List<AdminModel> getAdmin(@RequestHeader String token) {
-        return adminService.getAdmin(token);
+    public ResponseEntity<AdminResponse> getAdmin(@RequestHeader String token) {
+        List<AdminModel> adminModel =  adminService.getAdmin(token);
+        AdminResponse adminResponse = new AdminResponse(200,"Admin Fetched successfully",adminModel);
+        return new ResponseEntity<>(adminResponse, HttpStatus.OK);
     }
 
     /*
@@ -60,8 +68,10 @@ public class AdminController {
      * @Param : token and id
      */
     @DeleteMapping("/deleteadmin/{id}")
-    public AdminModel deleteAdmin(@PathVariable("id") Long id, @RequestHeader String token) {
-        return adminService.deleteAdmin(id, token);
+    public ResponseEntity<AdminResponse> deleteAdmin(@PathVariable("id") Long id, @RequestHeader String token) {
+        AdminModel adminModel =  adminService.deleteAdmin(id, token);
+        AdminResponse adminResponse = new AdminResponse(200,"Admin Deleted successfully",adminModel);
+        return new ResponseEntity<>(adminResponse, HttpStatus.OK);
     }
 
     /*
@@ -87,8 +97,10 @@ public class AdminController {
      * @Param : token and password
      */
     @PutMapping("/changepassword/{id}")
-    public AdminModel changePassword(@PathVariable("id") String token, @RequestParam String password) {
-        return adminService.changePassword(token, password);
+    public ResponseEntity<AdminResponse> changePassword(@PathVariable("id") String token, @RequestParam String password) {
+        AdminModel adminModel = adminService.changePassword(token, password);
+        AdminResponse adminResponse = new AdminResponse(200,"Admin Password Changed successfully",adminModel);
+        return new ResponseEntity<>(adminResponse, HttpStatus.OK);
     }
 
     /*
@@ -96,7 +108,15 @@ public class AdminController {
      * @Param : id and token
      */
     @PostMapping("/addprofilepath")
-    public AdminModel addProfilePath(@RequestParam Long id, @RequestParam String profilePath, @RequestHeader String token) {
-        return adminService.addProfilePath(id, profilePath, token);
+    public ResponseEntity<AdminResponse> addProfilePath(@RequestParam Long id, @RequestParam String profilePath,
+                                                        @RequestHeader String token) {
+        AdminModel adminModel =  adminService.addProfilePath(id, profilePath, token);
+        AdminResponse adminResponse = new AdminResponse(200,"Admin Profilepath added successfully",adminModel);
+        return new ResponseEntity<>(adminResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/validateuser/{token}")
+    public Boolean validateUser(@PathVariable String token) {
+        return adminService.validateUser(token);
     }
 }

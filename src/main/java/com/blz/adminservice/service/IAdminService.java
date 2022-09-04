@@ -3,6 +3,7 @@ package com.blz.adminservice.service;
 import com.blz.adminservice.dto.AdminDTO;
 import com.blz.adminservice.model.AdminModel;
 import com.blz.adminservice.util.AdminResponse;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -23,5 +24,7 @@ public interface IAdminService {
     AdminModel changePassword(String token, String password);
 
     AdminModel addProfilePath(Long id, String profilePath, String token);
+
+    Boolean validateUser(String token);
 }
 
